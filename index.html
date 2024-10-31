@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Throw Calculator with Time</title>
+</head>
+<body>
+    <h2>Throw Calculation</h2>
+    <label for="height">Height from ground (inches):</label>
+    <input type="number" id="height" placeholder="e.g., 30">
+    <br><br>
+    <button onclick="calculate()">Calculate</button>
+
+    <h3>Results:</h3>
+    <p id="result"></p>
+
+    <script>
+        function calculateThrowParameters(height, time) {
+            const g = 386.09; // Gravitational acceleration in inches/s²
+            const distance = 88.5; // Horizontal distance in inches
+            const angle = Math.PI / 4; // 45 degrees in radians
+            
+            // Calculate required initial speed to hit the target at 45 degrees using the time formula
+            let speed = distance / (Math.cos(angle) * time);
+
+            // Check if the height requirement is met (vertical position at time t)
+            let vertical_position = speed * Math.sin(angle) * time - 0.5 * g * time ** 2;
+
+            return {
+                speed: speed.toFixed(2),
+                angle: (angle * 180 / Math.PI).toFixed(2),
+                vertical_position: vertical_position.toFixed(2)
+            };
+        }
+
+        function calculate() {
+            let height = parseFloat(document.getElementById('height').value);
+            let time = 0.5597252803; // Given time in seconds
+
+            if (isNaN(height) || height <= 0) {
+                document.getElementById('result').innerText = "Please enter a valid height.";
+                return;
+            }
+
+            let result = calculateThrowParameters(height, time);
+
+            document.getElementById('result').innerText = `Required Speed: ${result.speed} inches/second, ` +
+                `Angle: ${result.angle}°, Vertical Position at t: ${result.vertical_position} inches`;
+        }
+    </script>
+</body>
+</html>
